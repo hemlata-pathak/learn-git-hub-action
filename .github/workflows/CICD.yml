@@ -20,7 +20,7 @@ jobs:
           npm run build
       - uses: actions/upload-artifact@v3
         with:
-          name: simple-systems-artifect/build
+          name: simple-systems-artifect
           path: build    
   DeployStaging:
     name: Deploy to Staging 
@@ -37,7 +37,7 @@ jobs:
       - name: Deploy
         run:  |
           npm install --global surge
-          surge --project build --domain git-action-demo-dev.surge.sh --token ${{secrets.SURGE_TOKEN}}
+          surge --project ./ --domain git-action-demo-dev.surge.sh --token ${{secrets.SURGE_TOKEN}}
         working-directory: simple-systems-artifect
             
   DeployProd:
