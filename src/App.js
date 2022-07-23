@@ -15,7 +15,7 @@ function App() {
           target="_blank"
           rel="noopener noreferrer"
         >
-          Learn React with git newwww
+          Learn React with git newwww hello
         </a>
       </header>
     </div>
