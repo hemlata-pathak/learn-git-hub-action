@@ -96,5 +96,5 @@ jobs:
     image: alpine
     steps:
       run: |
-      apk add --no-cache curl
-      curl git-action-demo.surge.sh | tac | tac | grep -q chutiya
+        apk add --no-cache curl
+        curl git-action-demo.surge.sh | tac | tac | grep -q chutiya
