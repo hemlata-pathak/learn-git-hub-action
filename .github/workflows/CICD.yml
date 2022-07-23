@@ -9,10 +9,9 @@ on:
 jobs:
   extract-branch-name:
     name: Extract branch name
-    steps:
-      shell: bash
-      run: echo "##[set-output name=branch;]$(echo ${GITHUB_REF#refs/heads/})"
-      id: extract_branch
+    shell: bash
+    run: echo "##[set-output name=branch;]$(echo ${GITHUB_REF#refs/heads/})"
+    id: extract_branch
 
   build:
     runs-on: ubuntu-latest
