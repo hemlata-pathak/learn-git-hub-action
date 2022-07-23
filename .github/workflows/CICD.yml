@@ -1,23 +1,16 @@
 name: CI + CD
 
-on:
-  push:
-    branches: [ main ]
-  pull_request:
-    branches: [ main ]
+on: push
 
 jobs:
-  extract-branch-name:
-    name: Extract branch name
-    shell: bash
-    run: echo "##[set-output name=branch;]$(echo ${GITHUB_REF#refs/heads/})"
-    id: extract_branch
-
   build:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repository
         uses: actions/checkout@v2
+      
+      - name: Branch name
+        run: echo running on branch ${GITHUB_REF##*/}
       
       - name: Set up Node.js
         uses: actions/setup-node@v1
