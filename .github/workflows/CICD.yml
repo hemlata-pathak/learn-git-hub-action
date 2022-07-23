@@ -22,7 +22,8 @@ jobs:
         with:
           name: simple-systems-artifect
           path: build    
-  DeployStaging:
+  
+  deploy-staging:
     name: Deploy to Staging 
     needs: [build]
     runs-on: ubuntu-latest
@@ -30,26 +31,26 @@ jobs:
       name: Staging
       url: 'http://git-action-demo-dev.surge.sh'
     steps:
-      - name: Get artifact
+      - name: get artifact
         uses: actions/download-artifact@v1
         with:
           name: simple-systems-artifect
-      - name: Deploy
+      - name: deploy
         run:  |
           npm install --global surge
           surge --project ./ --domain git-action-demo-dev.surge.sh --token ${{secrets.SURGE_TOKEN}}
         working-directory: simple-systems-artifect
             
-  DeployProd:
+  deploy-prod:
     name: Deploy to Production 
-    needs: [Build]
+    needs: [deploy-staging]
     runs-on: ubuntu-latest
     environment: 
       name: Production
       url: 'http://git-action-demo.surge.sh'
     steps:
-      - name: Deploy
+      - name: deploy
         run:  |
           npm install --global surge
-          ls
-          surge --project build --domain git-action-demo.surge.sh --token ${{secrets.SURGE_TOKEN}}
+          surge --project ./ --domain git-action-demo.surge.sh --token ${{secrets.SURGE_TOKEN}}
+        working-directory: simple-systems-artifect
