@@ -44,9 +44,9 @@ jobs:
       url: 'http://git-action-demo-dev.surge.sh'
     steps:
       - name: Deploy
+        working-directory: ./build
         run:  |
           npm install --global surge
-          pwd
           surge --domain git-action-demo-dev.surge.sh --token ${{secrets.SURGE_TOKEN}} 
             
   DeployProd:
