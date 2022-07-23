@@ -13,7 +13,7 @@ jobs:
           echo "FEATURE_DOMAIN=git-action-demo-${BRANCH}.surge.sh" >> $GITHUB_ENV
           echo "DEVELOPMENT_DOMAIN=git-action-demo-dev.surge.sh" >> $GITHUB_ENV
           echo "PRODUCTION_DOMAIN=git-action-demo.surge.sh" >> $GITHUB_ENV
-    steps:
+      
       - name: Checkout repository
         uses: actions/checkout@v2
       
