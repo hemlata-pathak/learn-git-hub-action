@@ -2,25 +2,23 @@ name: CI + CD
 
 on: push
 
-jobs:  
+env:
+  HTTP: https:// 
+  FEATURE_DOMAIN: git-action-demo-${{GITHUB_REF##*/}}.surge.sh
+  DEVELOPMENT_DOMAIN: git-action-demo-dev.surge.sh
+  PRODUCTION_DOMAIN: git-action-demo.surge.sh
+
+jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      - name: Set environmental variables
-        run: |
-          echo "HTTP=https://" >> $GITHUB_ENV
-          echo "BRANCH=${GITHUB_REF##*/}" >> $GITHUB_ENV
-          echo "FEATURE_DOMAIN=git-action-demo-${{ env.BRANCH }}.surge.sh" >> $GITHUB_ENV
-          echo "DEVELOPMENT_DOMAIN=git-action-demo-dev.surge.sh" >> $GITHUB_ENV
-          echo "PRODUCTION_DOMAIN=git-action-demo.surge.sh" >> $GITHUB_ENV
-      
       - name: Checkout repository
         uses: actions/checkout@v2
       
       - name: Branch name
         run: |
-          echo running on branch ${{ env.BRANCH }}
-          echo feature url is ${{ env.FEATURE_DOMAIN }}
+          echo running on branch ${GITHUB_REF##*/}
+          echo feature url is $FEATURE_DOMAIN
       
       - name: Set up Node.js
         uses: actions/setup-node@v1
@@ -45,9 +43,9 @@ jobs:
       contains( github.ref, 'feature' ) || contains( github.ref, 'bugfix' ) 
     needs: [build]
     runs-on: ubuntu-latest
-    environment: 
+    env: 
       name: dev
-      url: ${{ env.HTTP }}${{ env.FEATURE_DOMAIN }}
+      url: 'http://git-action-demo-${GITHUB_REF##*/}.surge.sh'
     steps:
       - name: get artifact
         uses: actions/download-artifact@v1
@@ -56,7 +54,7 @@ jobs:
       - name: deploy
         run: |
           npm install --global surge
-          surge --project ./ --domain ${{ env.FEATURE_DOMAIN }} --token ${{secrets.SURGE_TOKEN}}
+          surge --project ./ --domain $url --token ${{secrets.SURGE_TOKEN}}
         working-directory: simple-systems-artifect
   
   deploy-staging:
