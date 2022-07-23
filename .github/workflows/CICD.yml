@@ -2,13 +2,17 @@ name: CI + CD
 
 on: push
 
-env:
-  HTTP: https:// 
-  FEATURE_DOMAIN: git-action-demo-${GITHUB_REF##*/}.surge.sh
-  DEVELOPMENT_DOMAIN: git-action-demo-dev.surge.sh
-  PRODUCTION_DOMAIN: git-action-demo.surge.sh
-
 jobs:
+  env-setup:
+    steps:
+      - name: Set environmental variables
+        run: |
+          echo "HTTP=https://" >> $GITHUB_ENV
+          echo "BRANCH=${GITHUB_REF##*/}" >> $GITHUB_ENV
+          echo "FEATURE_DOMAIN=git-action-demo-${BRANCH}.surge.sh" >> $GITHUB_ENV
+          echo "DEVELOPMENT_DOMAIN=git-action-demo-dev.surge.sh" >> $GITHUB_ENV
+          echo "PRODUCTION_DOMAIN=git-action-demo.surge.sh" >> $GITHUB_ENV
+  
   build:
     runs-on: ubuntu-latest
     steps:
@@ -17,7 +21,7 @@ jobs:
       
       - name: Branch name
         run: |
-          echo running on branch ${GITHUB_REF##*/}
+          echo running on branch $BRANCH
           echo feature url is $FEATURE_DOMAIN
       
       - name: Set up Node.js
@@ -45,7 +49,7 @@ jobs:
     runs-on: ubuntu-latest
     environment: 
       name: dev
-      url: 'http://git-action-demo-${GITHUB_REF##*/}.surge.sh'
+      url: $HTTP$FEATURE_DOMAIN
     steps:
       - name: get artifact
         uses: actions/download-artifact@v1
