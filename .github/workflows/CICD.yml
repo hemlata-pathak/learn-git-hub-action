@@ -92,7 +92,7 @@ jobs:
     name: smoke production
     if: github.event.ref == 'refs/heads/main'
     needs: [deploy-prod]
-    runs-on: alpine
+    runs-on: ubuntu-latest
     steps:
       - name: run smoke test
         run: |
