@@ -87,3 +87,14 @@ jobs:
           npm install --global surge
           surge --project ./ --domain git-action-demo.surge.sh --token ${{secrets.SURGE_TOKEN}}
         working-directory: simple-systems-artifect
+
+  smoke-prod:
+    name: smoke production
+    needs: [deploy-prod]
+    if: github.event.ref == 'refs/heads/main'
+    runs-on: alpine
+    image: alpine
+    steps:
+      run: |
+      apk add --no-cache curl
+      curl git-action-demo.surge.sh | tac | tac | grep -q chutiya
