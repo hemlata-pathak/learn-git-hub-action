@@ -21,7 +21,14 @@ jobs:
       - uses: actions/upload-artifact@v3
         with:
           name: simple-systems-artifect
-          path: build    
+          path: build  
+  test:
+    name: test
+    runs-on: ubuntu-latest
+    steps:
+      - name: test
+        run:  |
+          npm run test
   
   deploy-staging:
     name: Deploy to Staging 
