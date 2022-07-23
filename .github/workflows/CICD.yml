@@ -44,7 +44,7 @@ jobs:
         with:
           name: simple-systems-artifect
       - name: deploy
-        run:  |
+        run: |
           npm install --global surge
           surge --project ./ --domain git-action-demo-{GITHUB_REF##*/}.surge.sh --token ${{secrets.SURGE_TOKEN}}
         working-directory: simple-systems-artifect
@@ -64,7 +64,7 @@ jobs:
         with:
           name: simple-systems-artifect
       - name: deploy
-        run:  |
+        run: |
           npm install --global surge
           surge --project ./ --domain git-action-demo-dev.surge.sh --token ${{secrets.SURGE_TOKEN}}
         working-directory: simple-systems-artifect
@@ -78,8 +78,12 @@ jobs:
       name: Production
       url: 'http://git-action-demo.surge.sh'
     steps:
+      - name: get artifact
+        uses: actions/download-artifact@v1
+        with:
+          name: simple-systems-artifect
       - name: deploy
-        run:  |
+        run: |
           npm install --global surge
           surge --project ./ --domain git-action-demo.surge.sh --token ${{secrets.SURGE_TOKEN}}
         working-directory: simple-systems-artifect
