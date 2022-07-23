@@ -36,8 +36,8 @@ jobs:
     needs: [build]
     runs-on: ubuntu-latest
     environment: 
-      name: staging
-      url: 'http://git-action-demo-{GITHUB_REF##*/}.surge.sh'
+      name: dev
+      url: 'http://git-action-demo-${GITHUB_REF##*/}.surge.sh'
     steps:
       - name: get artifact
         uses: actions/download-artifact@v1
@@ -46,7 +46,7 @@ jobs:
       - name: deploy
         run: |
           npm install --global surge
-          surge --project ./ --domain git-action-demo-{GITHUB_REF##*/}.surge.sh --token ${{secrets.SURGE_TOKEN}}
+          surge --project ./ --domain git-action-demo-${GITHUB_REF##*/}.surge.sh --token ${{secrets.SURGE_TOKEN}}
         working-directory: simple-systems-artifect
   
   deploy-staging:
