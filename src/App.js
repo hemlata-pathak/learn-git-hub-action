@@ -15,7 +15,7 @@ function App() {
           target="_blank"
           rel="noopener noreferrer"
         >
-          deploy in production chutiya
+          I want to fix my bug
         </a>
       </header>
     </div>
