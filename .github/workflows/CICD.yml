@@ -36,7 +36,7 @@ jobs:
     runs-on: ubuntu-latest
     environment: 
       name: Staging
-      url: 'http://git-action-demo-dev.surge.sh'
+      url: 'http://git-action-demo-feature.surge.sh'
     steps:
       - name: get artifact
         uses: actions/download-artifact@v1
@@ -45,13 +45,12 @@ jobs:
       - name: deploy
         run:  |
           npm install --global surge
-          surge --project ./ --domain git-action-demo-dev.surge.sh --token ${{secrets.SURGE_TOKEN}}
+          surge --project ./ --domain git-action-demo-feature.surge.sh --token ${{secrets.SURGE_TOKEN}}
         working-directory: simple-systems-artifect
   
   deploy-staging:
     name: Deploy to Staging
-    if: |
-      github.event.ref == 'refs/heads/main' || github.event.ref == 'refs/heads/develop'
+    if: github.event.ref == 'refs/heads/develop'
     needs: [build]
     runs-on: ubuntu-latest
     environment: 
@@ -69,7 +68,8 @@ jobs:
         working-directory: simple-systems-artifect
             
   deploy-prod:
-    name: Deploy to Production 
+    name: Deploy to Production
+    if: github.event.ref == 'refs/heads/main' 
     needs: [deploy-staging]
     runs-on: ubuntu-latest
     environment: 
