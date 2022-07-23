@@ -24,6 +24,7 @@ jobs:
           path: build  
   test:
     name: test
+    needs: [build]
     runs-on: ubuntu-latest
     steps:
       - name: test
