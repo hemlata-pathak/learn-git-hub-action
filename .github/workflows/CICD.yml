@@ -31,8 +31,8 @@ jobs:
       - name: Deploy
         run: |
           npm install --global surge 
-          ls
-          surge --project build --domain git-action-demo-feature.surge.sh --token ${{secrets.SURGE_TOKEN}}  
+          cd build
+          surge --domain git-action-demo-feature.surge.sh --token ${{secrets.SURGE_TOKEN}}  
     
   DeployStaging:
     name: Deploy to Staging 
@@ -46,8 +46,8 @@ jobs:
       - name: Deploy
         run:  |
           npm install --global surge
-          ls
-          surge --project build --domain git-action-demo-dev.surge.sh --token ${{secrets.SURGE_TOKEN}} 
+          cd build
+          surge --domain git-action-demo-dev.surge.sh --token ${{secrets.SURGE_TOKEN}} 
             
   DeployProd:
     name: Deploy to Production 
