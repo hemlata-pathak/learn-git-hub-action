@@ -92,9 +92,5 @@ jobs:
     name: smoke production
     if: github.event.ref == 'refs/heads/main'
     needs: [deploy-prod]
-    runs-on: ubuntu-latest
-    steps:
-      - name: run smoke test
-        run: |
-          sudo apt install curl
-          curl git-action-demo.surge.sh | tac | tac | grep -q chutiya
+    uses: bahmutov/cypress-workflows/.github/workflows/standard.yml@v1
+          
