@@ -5,7 +5,7 @@ on:
     branches: [ main ]
 
 jobs:
-  deploy:
+  build:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@master
@@ -16,3 +16,20 @@ jobs:
       - run: npm run build
       - run: npm install --global surge
       - run: surge --project build --domain git-action-demo.surge.sh --token ${{secrets.SURGE_TOKEN}}
+      
+on:
+  push:
+    branches: [ develop ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@develop
+      - uses: actions/setup-node@master
+        with:
+          node-version: 14
+      - run: npm ci
+      - run: npm run build
+      - run: npm install --global surge
+      - run: surge --project build --domain git-action-demo-dev.surge.sh --token ${{secrets.SURGE_TOKEN}}

@@ -1,0 +1,57 @@
+name: CI + CD
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+  workflow_dispatch:
+
+jobs:
+  Build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-node@v1
+        with:
+          node-version: 14
+      - name: build
+        run: npm ci
+        run: npm run build
+        run: npm install --global surge
+    
+  DeployDev:
+    name: Deploy to Dev 
+    if: github.event_name == 'pull_request'
+    needs: [Build]
+    runs-on: ubuntu-latest
+    environment: 
+      name: Development
+      url: 'http://git-action-demo-feature.surge.sh'
+    steps:
+      - name: Deploy
+        run: surge --project build --domain git-action-demo-feature.surge.sh --token ${{secrets.SURGE_TOKEN}}  
+    
+  DeployStaging:
+    name: Deploy to Staging 
+    if: github.event.ref == 'refs/heads/main'
+    needs: [Build]
+    runs-on: ubuntu-latest
+    environment: 
+      name: Staging
+      url: 'http://git-action-demo-dev.surge.sh'
+    steps:
+      - name: Deploy
+        run: surge --project build --domain git-action-demo-dev.surge.sh --token ${{secrets.SURGE_TOKEN}} 
+            
+  DeployProd:
+    name: Deploy to Production 
+    needs: [DeployStaging]
+    runs-on: ubuntu-latest
+    environment: 
+      name: Production
+      url: 'http://git-action-demo.surge.sh'
+    steps:
+      - name: Deploy
+        run: surge --project build --domain git-action-demo.surge.sh --token ${{secrets.SURGE_TOKEN}}
+    
