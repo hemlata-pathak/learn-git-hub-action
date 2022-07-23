@@ -7,6 +7,12 @@ on:
     branches: [ main ]
 
 jobs:
+  extract-branch-name:
+    - name: Extract branch name
+      shell: bash
+      run: echo "##[set-output name=branch;]$(echo ${GITHUB_REF#refs/heads/})"
+      id: extract_branch
+
   build:
     runs-on: ubuntu-latest
     steps:
@@ -31,7 +37,9 @@ jobs:
           path: build  
     
   deploy-feature:
-    name: Deploy to feature branch 
+    name: Deploy to feature branch
+    if: |
+      contains( github.ref, 'feature' ) || contains( github.ref, 'bugfix' ) 
     needs: [build]
     runs-on: ubuntu-latest
     environment: 
@@ -45,7 +53,7 @@ jobs:
       - name: deploy
         run:  |
           npm install --global surge
-          surge --project ./ --domain git-action-demo-feature.surge.sh --token ${{secrets.SURGE_TOKEN}}
+          surge --project ./ --domain git-action-demo-${{secrets.SURGE_TOKEN}}.surge.sh --token ${{secrets.SURGE_TOKEN}}
         working-directory: simple-systems-artifect
   
   deploy-staging:
