@@ -20,8 +20,8 @@ jobs:
           npm run build
       - uses: actions/upload-artifact@v3
         with:
-          name: simple-systems-artifect
-          path: simple-systems-artifect/build    
+          name: simple-systems-artifect/build
+          path: build    
   DeployStaging:
     name: Deploy to Staging 
     needs: [build]
