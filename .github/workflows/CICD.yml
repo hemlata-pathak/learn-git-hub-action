@@ -46,6 +46,7 @@ jobs:
       - name: Deploy
         run:  |
           npm install --global surge
+          ls
           surge --project build --domain git-action-demo-dev.surge.sh --token ${{secrets.SURGE_TOKEN}} 
             
   DeployProd:
@@ -59,4 +60,5 @@ jobs:
       - name: Deploy
         run:  |
           npm install --global surge
+          ls
           surge --project build --domain git-action-demo.surge.sh --token ${{secrets.SURGE_TOKEN}}
