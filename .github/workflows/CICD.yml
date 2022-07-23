@@ -96,5 +96,5 @@ jobs:
     steps:
       - name: run smoke test
         run: |
-          apk add --no-cache curl
+          sudo apt install curl
           curl git-action-demo.surge.sh | tac | tac | grep -q chutiya
