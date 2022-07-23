@@ -18,7 +18,6 @@ jobs:
         run: |
           npm ci
           npm run build
-          npm install --global surge 
     
   DeployDev:
     name: Deploy to Dev 
@@ -30,7 +29,9 @@ jobs:
       url: 'http://git-action-demo-feature.surge.sh'
     steps:
       - name: Deploy
-        run: surge --project build --domain git-action-demo-feature.surge.sh --token ${{secrets.SURGE_TOKEN}}  
+        run: |
+          npm install --global surge 
+          surge --project build --domain git-action-demo-feature.surge.sh --token ${{secrets.SURGE_TOKEN}}  
     
   DeployStaging:
     name: Deploy to Staging 
@@ -42,7 +43,9 @@ jobs:
       url: 'http://git-action-demo-dev.surge.sh'
     steps:
       - name: Deploy
-        run: surge --project build --domain git-action-demo-dev.surge.sh --token ${{secrets.SURGE_TOKEN}} 
+        run:  |
+          npm install --global surge
+          surge --project build --domain git-action-demo-dev.surge.sh --token ${{secrets.SURGE_TOKEN}} 
             
   DeployProd:
     name: Deploy to Production 
@@ -53,4 +56,6 @@ jobs:
       url: 'http://git-action-demo.surge.sh'
     steps:
       - name: Deploy
-        run: surge --project build --domain git-action-demo.surge.sh --token ${{secrets.SURGE_TOKEN}}
+        run:  |
+          npm install --global surge
+          surge --project build --domain git-action-demo.surge.sh --token ${{secrets.SURGE_TOKEN}}
