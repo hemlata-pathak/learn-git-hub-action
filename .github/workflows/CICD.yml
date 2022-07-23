@@ -36,8 +36,8 @@ jobs:
     needs: [build]
     runs-on: ubuntu-latest
     environment: 
-      name: Staging
-      url: 'http://git-action-demo-feature.surge.sh'
+      name: staging
+      url: 'http://git-action-demo-{GITHUB_REF##*/}.surge.sh'
     steps:
       - name: get artifact
         uses: actions/download-artifact@v1
@@ -50,7 +50,7 @@ jobs:
         working-directory: simple-systems-artifect
   
   deploy-staging:
-    name: Deploy to Staging
+    name: Deploy to staging
     if: |
       github.event.ref == 'refs/heads/develop' || github.event.ref == 'refs/heads/main' 
     needs: [build]
@@ -69,7 +69,7 @@ jobs:
           surge --project ./ --domain git-action-demo-dev.surge.sh --token ${{secrets.SURGE_TOKEN}}
         working-directory: simple-systems-artifect
             
-  deploy-prod:
+  deploy-production:
     name: Deploy to Production
     if: github.event.ref == 'refs/heads/main' 
     needs: [deploy-staging]
@@ -91,6 +91,6 @@ jobs:
   smoke-prod:
     name: smoke production
     if: github.event.ref == 'refs/heads/main'
-    needs: [deploy-prod]
+    needs: [deploy-production]
     uses: bahmutov/cypress-workflows/.github/workflows/standard.yml@v1
           
