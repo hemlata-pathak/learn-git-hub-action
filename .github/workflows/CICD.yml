@@ -14,12 +14,14 @@ jobs:
       - uses: actions/setup-node@v1
         with:
           node-version: 14
+      - uses: actions/upload-artifact@v3
+        with:
+          name: homework
+          path: build  
       - name: build
         run: |
           npm ci
           npm run build
-          npm install --global surge
-          surge --project build --domain git-action-demo-dev.surge.sh --token ${{secrets.SURGE_TOKEN}}
     
   DeployDev:
     name: Deploy to Dev 
@@ -36,21 +38,19 @@ jobs:
           cd build
           surge --domain git-action-demo-feature.surge.sh --token ${{secrets.SURGE_TOKEN}}  
     
-  # DeployStaging:
-  #   name: Deploy to Staging 
-  #   if: github.event.ref == 'refs/heads/main'
-  #   needs: [Build]
-  #   runs-on: ubuntu-latest
-  #   environment: 
-  #     name: Staging
-  #     url: 'http://git-action-demo-dev.surge.sh'
-  #   steps:
-  #     - name: Deploy
-  #       run:  |
-  #         npm ci
-  #         npm run build
-  #         npm install --global surge
-  #         surge --project build --domain git-action-demo-dev.surge.sh --token ${{secrets.SURGE_TOKEN}} 
+  DeployStaging:
+    name: Deploy to Staging 
+    if: github.event.ref == 'refs/heads/main'
+    needs: [Build]
+    runs-on: ubuntu-latest
+    environment: 
+      name: Staging
+      url: 'http://git-action-demo-dev.surge.sh'
+    steps:
+      - name: Deploy
+        run:  |
+          npm install --global surge
+          surge --project build --domain git-action-demo-dev.surge.sh --token ${{secrets.SURGE_TOKEN}} 
             
   DeployProd:
     name: Deploy to Production 
