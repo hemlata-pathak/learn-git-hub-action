@@ -20,7 +20,7 @@ jobs:
           npm run build
       - uses: actions/upload-artifact@v3
         with:
-          name: homework
+          name: react-build
           path: build  
     
   DeployDev:
@@ -47,10 +47,15 @@ jobs:
       name: Staging
       url: 'http://git-action-demo-dev.surge.sh'
     steps:
+      - name: Get artifact
+        uses: actions/download-artifact@v3
+        with:
+          name: react-build
       - name: Deploy
         run:  |
           npm install --global surge
-          surge --project build --domain git-action-demo-dev.surge.sh --token ${{secrets.SURGE_TOKEN}} 
+          surge --project build --domain git-action-demo-dev.surge.sh --token ${{secrets.SURGE_TOKEN}}
+        working-directory: react-build 
             
   DeployProd:
     name: Deploy to Production 
