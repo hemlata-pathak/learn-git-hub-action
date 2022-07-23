@@ -15,9 +15,10 @@ jobs:
         with:
           node-version: 14
       - name: build
-        run: npm ci
-        run: npm run build
-        run: npm install --global surge
+        run: |
+        npm ci
+        npm run build
+        npm install --global surge 
     
   DeployDev:
     name: Deploy to Dev 
@@ -53,4 +54,3 @@ jobs:
     steps:
       - name: Deploy
         run: surge --project build --domain git-action-demo.surge.sh --token ${{secrets.SURGE_TOKEN}}
-        
