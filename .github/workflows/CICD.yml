@@ -38,7 +38,8 @@ jobs:
         run:  |
           npm install --global surge
           surge --project build --domain git-action-demo-dev.surge.sh --token ${{secrets.SURGE_TOKEN}}
-        path: react-build 
+        with:
+          path: react-build 
             
   DeployProd:
     name: Deploy to Production 
