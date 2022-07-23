@@ -10,26 +10,43 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
-      - uses: actions/setup-node@v1
+      - name: Checkout repository
+        uses: actions/checkout@v2
+      
+      - name: Set up Node.js
+        uses: actions/setup-node@v1
         with:
           node-version: 14
+      - name: Install dependencies
+        run: npm ci
+      
+      - name: Run the tests
+        run: npm run test
+      
       - name: build
-        run: |
-          npm ci
-          npm run build
+        run: npm run build
       - uses: actions/upload-artifact@v3
         with:
           name: simple-systems-artifect
           path: build  
-  test:
-    name: test
+    
+  deploy-feature:
+    name: Deploy to feature branch 
     needs: [build]
     runs-on: ubuntu-latest
+    environment: 
+      name: Staging
+      url: 'http://git-action-demo-dev.surge.sh'
     steps:
-      - name: test
+      - name: get artifact
+        uses: actions/download-artifact@v1
+        with:
+          name: simple-systems-artifect
+      - name: deploy
         run:  |
-          npm run test
+          npm install --global surge
+          surge --project ./ --domain git-action-demo-dev.surge.sh --token ${{secrets.SURGE_TOKEN}}
+        working-directory: simple-systems-artifect
   
   deploy-staging:
     name: Deploy to Staging 
