@@ -31,6 +31,7 @@ jobs:
       - name: Deploy
         run: |
           npm install --global surge 
+          ls
           surge --project build --domain git-action-demo-feature.surge.sh --token ${{secrets.SURGE_TOKEN}}  
     
   DeployStaging:
