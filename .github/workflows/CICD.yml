@@ -21,26 +21,9 @@ jobs:
       - uses: actions/upload-artifact@v3
         with:
           name: react-build
-          path: build  
-    
-  DeployDev:
-    name: Deploy to Dev 
-    if: github.event_name == 'pull_request'
-    needs: [Build]
-    runs-on: ubuntu-latest
-    environment: 
-      name: Development
-      url: 'http://git-action-demo-feature.surge.sh'
-    steps:
-      - name: Deploy
-        run: |
-          npm install --global surge 
-          cd build
-          surge --domain git-action-demo-feature.surge.sh --token ${{secrets.SURGE_TOKEN}}  
-    
+          path: build    
   DeployStaging:
     name: Deploy to Staging 
-    if: github.event.ref == 'refs/heads/main'
     needs: [Build]
     runs-on: ubuntu-latest
     environment: 
@@ -48,7 +31,7 @@ jobs:
       url: 'http://git-action-demo-dev.surge.sh'
     steps:
       - name: Get artifact
-        uses: actions/download-artifact@v3
+        uses: actions/download-artifact@v1
         with:
           name: react-build
       - name: Deploy
