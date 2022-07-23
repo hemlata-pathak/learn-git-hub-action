@@ -22,8 +22,8 @@ jobs:
       
       - name: Branch name
         run: |
-          echo running on branch $BRANCH
-          echo feature url is $FEATURE_DOMAIN
+          echo running on branch ${{ env.BRANCH }}
+          echo feature url is ${{ env.FEATURE_DOMAIN }}
       
       - name: Set up Node.js
         uses: actions/setup-node@v1
@@ -50,7 +50,7 @@ jobs:
     runs-on: ubuntu-latest
     environment: 
       name: dev
-      url: $HTTP$FEATURE_DOMAIN
+      url: ${{ env.HTTP }}${{ env.FEATURE_DOMAIN }}
     steps:
       - name: get artifact
         uses: actions/download-artifact@v1
@@ -59,7 +59,7 @@ jobs:
       - name: deploy
         run: |
           npm install --global surge
-          surge --project ./ --domain $FEATURE_DOMAIN --token ${{secrets.SURGE_TOKEN}}
+          surge --project ./ --domain ${{ env.FEATURE_DOMAIN }} --token ${{secrets.SURGE_TOKEN}}
         working-directory: simple-systems-artifect
   
   deploy-staging:
