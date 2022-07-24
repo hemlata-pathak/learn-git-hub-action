@@ -53,7 +53,7 @@ jobs:
       github.event.ref == 'refs/heads/develop' || github.event.ref == 'refs/heads/main' 
     needs: [build]
     runs-on: ubuntu-latest
-    environment: 
+    env: 
       DEVELOPMENT_DOMAIN: 'http://git-action-demo-dev.surge.sh'
     steps:
       - name: get artifact
