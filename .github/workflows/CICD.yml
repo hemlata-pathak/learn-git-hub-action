@@ -64,12 +64,12 @@ jobs:
       - name: get artifact
         uses: actions/download-artifact@v1
         with:
-          name: $ARTIFACT_ID
+          name: ${{ARTIFACT_ID}}
       - name: deploy
         run: |
           npm install --global surge
           surge --project ./ --domain $DEVELOPMENT_DOMAIN --token ${{secrets.SURGE_TOKEN}}
-        working-directory: $ARTIFACT_ID
+        working-directory: ${{ARTIFACT_ID}}
             
   deploy-production:
     name: Deploy to Production
