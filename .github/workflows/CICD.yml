@@ -2,10 +2,6 @@ name: CI + CD
 
 on: push
 
-env:
-  HTTP: https:// 
-  DEVELOPMENT_DOMAIN: git-action-demo-dev.surge.sh
-
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -40,9 +36,6 @@ jobs:
       contains( github.ref, 'feature' ) || contains( github.ref, 'bugfix' ) 
     needs: [build]
     runs-on: ubuntu-latest
-    env: 
-      name: dev
-      URL: 'http://git-action-demo-${GITHUB_REF##*/}.surge.sh'
     steps:
       - name: get artifact
         uses: actions/download-artifact@v1
@@ -51,7 +44,7 @@ jobs:
       - name: deploy
         run: |
           npm install --global surge
-          surge --project ./ --domain $url --token ${{secrets.SURGE_TOKEN}}
+          surge --project ./ --domain git-action-demo-${GITHUB_REF##*/}.surge.sh --token ${{secrets.SURGE_TOKEN}}
         working-directory: simple-systems-artifect
   
   deploy-staging:
@@ -61,8 +54,7 @@ jobs:
     needs: [build]
     runs-on: ubuntu-latest
     environment: 
-      name: Staging
-      url: 'http://git-action-demo-dev.surge.sh'
+      DEVELOPMENT_DOMAIN: 'http://git-action-demo-dev.surge.sh'
     steps:
       - name: get artifact
         uses: actions/download-artifact@v1
@@ -80,7 +72,6 @@ jobs:
     needs: [deploy-staging]
     runs-on: ubuntu-latest
     env: 
-      name: Production
       PRODUCTION_DOMAIN: 'http://git-action-demo.surge.sh'
     steps:
       - name: get artifact
