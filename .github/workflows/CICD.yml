@@ -4,7 +4,6 @@ on: push
 
 env:
   HTTP: https:// 
-  FEATURE_DOMAIN: git-action-demo-${{GITHUB_REF##*/}}.surge.sh
   DEVELOPMENT_DOMAIN: git-action-demo-dev.surge.sh
   PRODUCTION_DOMAIN: git-action-demo.surge.sh
 
@@ -18,7 +17,6 @@ jobs:
       - name: Branch name
         run: |
           echo running on branch ${GITHUB_REF##*/}
-          echo feature url is $FEATURE_DOMAIN
       
       - name: Set up Node.js
         uses: actions/setup-node@v1
