@@ -4,6 +4,7 @@ on: push
 
 env:
   ARTIFACT_ID: simple-systems-artifact
+  BUILD_DIR: frontend/dist/prod
 
 jobs:
   build:
@@ -33,7 +34,7 @@ jobs:
         uses: actions/upload-artifact@v3
         with:
           name: ${{env.ARTIFACT_ID}}
-          path: build  
+          path: ${{env.BUILD_DIR}}  
     
   deploy-feature:
     name: Deploy to feature branch
