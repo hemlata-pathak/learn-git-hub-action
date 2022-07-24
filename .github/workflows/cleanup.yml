@@ -11,4 +11,4 @@ jobs:
         run: |
           echo "Clean up for branch ${{ github.event.ref }}"
           npm install --global surge
-          surge teardown git-action-demo-${github.event.ref}.surge.sh
+          surge teardown git-action-demo-${{ github.event.ref }}.surge.sh
