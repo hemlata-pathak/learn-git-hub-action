@@ -45,12 +45,12 @@ jobs:
       - name: get artifact
         uses: actions/download-artifact@v1
         with:
-          name: $ARTIFACT_ID
+          name: ${{env.ARTIFACT_ID}}
       - name: deploy
         run: |
           npm install --global surge
           surge --project ./ --domain git-action-demo-${GITHUB_REF##*/}.surge.sh --token ${{secrets.SURGE_TOKEN}}
-        working-directory: $ARTIFACT_ID
+        working-directory: ${{env.ARTIFACT_ID}}
   
   deploy-staging:
     name: Deploy to staging
@@ -82,12 +82,12 @@ jobs:
       - name: get artifact
         uses: actions/download-artifact@v1
         with:
-          name: $ARTIFACT_ID
+          name: ${{env.ARTIFACT_ID}}
       - name: deploy
         run: |
           npm install --global surge
           surge --project ./ --domain $PRODUCTION_DOMAIN --token ${{secrets.SURGE_TOKEN}}
-        working-directory: $ARTIFACT_ID
+        working-directory: ${{env.ARTIFACT_ID}}
 
   smoke-production:
     name: Smoke production
