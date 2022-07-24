@@ -41,6 +41,8 @@ jobs:
       contains( github.ref, 'feature' ) || contains( github.ref, 'bugfix' ) 
     needs: [build]
     runs-on: ubuntu-latest
+    environment: 
+      name: Dev
     steps:
       - name: get artifact
         uses: actions/download-artifact@v1
@@ -60,6 +62,9 @@ jobs:
     runs-on: ubuntu-latest
     env: 
       DEVELOPMENT_DOMAIN: 'http://git-action-demo-dev.surge.sh'
+    environment: 
+      name: Staging
+      url: 'http://git-action-demo-dev.surge.sh'
     steps:
       - name: get artifact
         uses: actions/download-artifact@v1
@@ -78,6 +83,9 @@ jobs:
     runs-on: ubuntu-latest
     env: 
       PRODUCTION_DOMAIN: 'http://git-action-demo.surge.sh'
+    environment: 
+      name: Production
+      url: 'http://git-action-demo.surge.sh'
     steps:
       - name: get artifact
         uses: actions/download-artifact@v1
