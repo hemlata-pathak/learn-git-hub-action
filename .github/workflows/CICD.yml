@@ -5,7 +5,6 @@ on: push
 env:
   HTTP: https:// 
   DEVELOPMENT_DOMAIN: git-action-demo-dev.surge.sh
-  PRODUCTION_DOMAIN: git-action-demo.surge.sh
 
 jobs:
   build:
@@ -80,9 +79,9 @@ jobs:
     if: github.event.ref == 'refs/heads/main' 
     needs: [deploy-staging]
     runs-on: ubuntu-latest
-    environment: 
+    env: 
       name: Production
-      url: 'http://git-action-demo.surge.sh'
+      PRODUCTION_DOMAIN: 'http://git-action-demo.surge.sh'
     steps:
       - name: get artifact
         uses: actions/download-artifact@v1
