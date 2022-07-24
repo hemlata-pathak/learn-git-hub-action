@@ -4,7 +4,7 @@ on: delete
 jobs:
   delete:
     if: |
-      contains( github.event.ref, 'feature' ) || contains( github.event.ref, 'bugfix' )
+      contains( github.event.ref, 'feature' ) || contains( github.event.ref, 'bugfix' ) 
     runs-on: ubuntu-latest
     steps:
       - name: Clean up
