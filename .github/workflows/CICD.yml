@@ -1,6 +1,9 @@
-name: CI + CD
+name: CI CD Workflow
 
 on: push
+
+env:
+  ARTIFACT_ID: simple-systems-artifact
 
 jobs:
   build:
@@ -10,9 +13,10 @@ jobs:
         uses: actions/checkout@v2
       
       - name: Branch name
-        run: echo running on branch ${GITHUB_REF##*/}
+        run: |
+          echo running on branch ${GITHUB_REF##*/}
       
-      - name: Set up Node.js
+      - name: Set up node
         uses: actions/setup-node@v1
         with:
           node-version: 14
@@ -24,9 +28,11 @@ jobs:
       
       - name: build
         run: npm run build
-      - uses: actions/upload-artifact@v3
+
+      - name: Upload artifacts 
+        uses: actions/upload-artifact@v3
         with:
-          name: simple-systems-artifect
+          name: ${{env.ARTIFACT_ID}}
           path: build  
     
   deploy-feature:
@@ -36,25 +42,26 @@ jobs:
     needs: [build]
     runs-on: ubuntu-latest
     environment: 
-      name: Staging
-      url: 'http://git-action-demo-feature.surge.sh'
+      name: Dev
     steps:
       - name: get artifact
         uses: actions/download-artifact@v1
         with:
-          name: simple-systems-artifect
+          name: ${{env.ARTIFACT_ID}}
       - name: deploy
         run: |
           npm install --global surge
-          surge --project ./ --domain git-action-demo-{GITHUB_REF##*/}.surge.sh --token ${{secrets.SURGE_TOKEN}}
-        working-directory: simple-systems-artifect
+          surge --project ./ --domain git-action-demo-${GITHUB_REF##*/}.surge.sh --token ${{secrets.SURGE_TOKEN}}
+        working-directory: ${{env.ARTIFACT_ID}}
   
   deploy-staging:
-    name: Deploy to Staging
+    name: Deploy to staging
     if: |
       github.event.ref == 'refs/heads/develop' || github.event.ref == 'refs/heads/main' 
     needs: [build]
     runs-on: ubuntu-latest
+    env: 
+      DEVELOPMENT_DOMAIN: 'http://git-action-demo-dev.surge.sh'
     environment: 
       name: Staging
       url: 'http://git-action-demo-dev.surge.sh'
@@ -62,18 +69,20 @@ jobs:
       - name: get artifact
         uses: actions/download-artifact@v1
         with:
-          name: simple-systems-artifect
+          name: ${{env.ARTIFACT_ID}}
       - name: deploy
         run: |
           npm install --global surge
-          surge --project ./ --domain git-action-demo-dev.surge.sh --token ${{secrets.SURGE_TOKEN}}
-        working-directory: simple-systems-artifect
+          surge --project ./ --domain $DEVELOPMENT_DOMAIN --token ${{secrets.SURGE_TOKEN}}
+        working-directory: ${{env.ARTIFACT_ID}}
             
-  deploy-prod:
+  deploy-production:
     name: Deploy to Production
     if: github.event.ref == 'refs/heads/main' 
     needs: [deploy-staging]
     runs-on: ubuntu-latest
+    env: 
+      PRODUCTION_DOMAIN: 'http://git-action-demo.surge.sh'
     environment: 
       name: Production
       url: 'http://git-action-demo.surge.sh'
@@ -81,16 +90,16 @@ jobs:
       - name: get artifact
         uses: actions/download-artifact@v1
         with:
-          name: simple-systems-artifect
+          name: ${{env.ARTIFACT_ID}}
       - name: deploy
         run: |
           npm install --global surge
-          surge --project ./ --domain git-action-demo.surge.sh --token ${{secrets.SURGE_TOKEN}}
-        working-directory: simple-systems-artifect
+          surge --project ./ --domain $PRODUCTION_DOMAIN --token ${{secrets.SURGE_TOKEN}}
+        working-directory: ${{env.ARTIFACT_ID}}
 
-  smoke-prod:
-    name: smoke production
+  smoke-production:
+    name: Smoke production
     if: github.event.ref == 'refs/heads/main'
-    needs: [deploy-prod]
+    needs: [deploy-production]
     uses: bahmutov/cypress-workflows/.github/workflows/standard.yml@v1
           

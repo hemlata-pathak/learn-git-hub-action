@@ -15,7 +15,7 @@ function App() {
           target="_blank"
           rel="noopener noreferrer"
         >
-          deploy in production chutiya
+          deploy in production chutiya feature domain
         </a>
       </header>
     </div>
