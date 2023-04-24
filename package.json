@@ -37,7 +37,8 @@
     ]
   },
   "devDependencies": {
-    "jest-watch-typeahead": "^0.6.5",
-    "cypress": "^9.5.0"
+    "cypress": "^9.5.0",
+    "danger": "^11.2.6",
+    "jest-watch-typeahead": "^0.6.5"
   }
 }
