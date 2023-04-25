@@ -1,6 +1,20 @@
 name: Danger JS
 on: [pull_request]
+
+permissions:
+  contents: read
+  pull-requests: write
+  issues: read
+  actions: read
+  
 jobs:
+  test2:
+    runs-on: ubuntu-latest
+    steps:
+    - id: hopr456
+      name: Hello
+      run: echo abc
+
   test:
     runs-on: ubuntu-latest
     steps:
@@ -12,4 +26,4 @@ jobs:
     - name: Danger
       run: npx danger ci
       env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        GITHUB_TOKEN: ${{ secrets.SEC }}
