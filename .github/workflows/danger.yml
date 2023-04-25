@@ -10,8 +10,8 @@ permissions:
 jobs:
   test2:
     runs-on: ubuntu-latest
-    id: 1234
     steps:
+    - id: 1234
     - name: Hello
       run: echo abc
 
