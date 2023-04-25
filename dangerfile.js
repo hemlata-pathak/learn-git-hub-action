@@ -5,4 +5,4 @@ message("Changed Files in this PR: \n - " + modifiedMD)
 
 message("Additions: \n - " + danger.github.pr.additions)
 
-message("Artifects: \n - " + danger.github.api.actions.getArtifact({owner: "hemlata-pathak", repo: "learn-git-hub-action"}))
+message("Artifects: \n - " + danger.github.api.actions.listWorkflowRuns({owner: "hemlata-pathak", repo: "learn-git-hub-action"}))
