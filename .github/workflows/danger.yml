@@ -11,7 +11,8 @@ jobs:
   test2:
     runs-on: ubuntu-latest
     steps:
-    - name: Hello
+    - id: 1234
+      name: Hello
       run: echo abc
 
   test:
